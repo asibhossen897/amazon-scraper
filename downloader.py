@@ -1,19 +1,6 @@
-import os
-
-import requests
+from utils import *
 from seleniumbase import BaseCase
 BaseCase.main(__name__, __file__)
-
-
-def save_img(path, title, link):
-    with open(f"{path}/{title}.jpg", 'wb') as f:
-        f.write(requests.get(link).content)
-        print("Image saved successfully.")
-
-
-def mkdir(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
 
 
 class ScrapeAmazon(BaseCase):
