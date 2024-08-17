@@ -1,6 +1,5 @@
 import pandas as pd
 from utils import *
-import concurrent.futures
 from seleniumbase import BaseCase
 BaseCase.main(__name__, __file__)
 
