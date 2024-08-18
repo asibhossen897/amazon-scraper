@@ -1,5 +1,3 @@
-from itertools import product
-
 from seleniumbase import BaseCase
 from utils import write2csv
 from bs4 import BeautifulSoup
@@ -16,7 +14,7 @@ class ProductLinkScraper(BaseCase):
         self.open(url)
         self.wait_for_element("h2")
 
-        soup = BeautifulSoup(self.get_page_source(), 'html.parser')
+        soup = self.get_beautiful_soup()
         data = []
 
         # Collect product links
@@ -32,7 +30,6 @@ class ProductLinkScraper(BaseCase):
 
                 # Find the element containing the rating for each product
                 product_container = link.find_parent("div", class_="sg-col-inner")
-                price_container = product_container.find("div", {"data-cy": "price-recipe"})
 
                 rating_text = None
                 total_review = None
@@ -47,19 +44,28 @@ class ProductLinkScraper(BaseCase):
                     if total_review:
                         total_review = total_review.get_text(strip=True)
 
+                # Refine the price extraction
                 original_price = None
                 discounted_price = None
-                if price_container:
-                    original_price = price_container.find("span", class_="a-price a-text-price")
-                    if original_price:
-                        original_price = original_price.get_text(strip=True)
+                price_container = product_container.find("div", {"data-cy": "price-recipe"})
 
-                    discounted_price = price_container.find("span", class_="a-price")
-                    if discounted_price:
-                        discounted_price = discounted_price.get_text(strip=True)
+                if price_container:
+                    # Extract original price
+                    original_price_span = price_container.find("span", class_="a-price a-text-price")
+                    if original_price_span:
+                        original_price = original_price_span.find("span", class_="a-offscreen")
+                        if original_price:
+                            original_price = original_price.get_text(strip=True)
+
+                    # Extract discounted price
+                    discounted_price_span = price_container.find("span", class_="a-price")
+                    if discounted_price_span:
+                        discounted_price = discounted_price_span.find("span", class_="a-offscreen")
+                        if discounted_price:
+                            discounted_price = discounted_price.get_text(strip=True)
 
                 # Combine the link, title, and rating in a dictionary
                 data.append({"link": full_url, "title": title, "rating_text": rating_text, "total_review": total_review, "original_price": original_price, "discounted_price": discounted_price})
 
-        filename = f"{search_query.replace('+', '_')}_links.csv"
+        filename = f"src/{search_query.replace('+', '_')}_links.csv"
         write2csv(filename, data)

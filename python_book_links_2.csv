@@ -2,13 +2,13 @@ link,title,rating_text,total_review,original_price,discounted_price
 https://www.amazon.com/dp/1718502702,"Python Crash Course, 3rd Edition: A Hands-On, Project-Based Introduction to Programming",4.8,"1,162",$49.99,$26.86
 https://www.amazon.com/dp/1593279922,"Automate the Boring Stuff with Python, 2nd Edition: Practical Programming for Total Beginners",4.7,"3,204",$39.95,$22.04
 https://www.amazon.com/dp/1449355730,Learning Python: Powerful Object-Oriented Programming,4.5,"1,919",$74.99,$48.83
-https://www.amazon.com/dp/B0CSY7BL6Q,Python Programming for Beginners: The Complete Python Coding Crash Course - Boost Your Growth with an Innovative Ultra-Fast Learning Framework and Exclusive Hands-On Interactive Exercises & Projects,4.7,411,$16.80,$15.96
 https://www.amazon.com/dp/1492056359,"Fluent Python: Clear, Concise, and Effective Programming",4.8,441,$79.99,$40.44
 https://www.amazon.com/dp/149322302X,Python 3: The Comprehensive Guide to Hands-On Python Programming,4.7,116,$59.95,$53.99
 https://www.amazon.com/dp/B0CSY7BL6Q,Python Programming for Beginners: The Complete Python Coding Crash Course - Boost Your Growth with an Innovative Ultra-Fast Learning Framework and Exclusive Hands-On Interactive Exercises & Projects,4.7,411,$16.80,$15.96
 https://www.amazon.com/dp/B0BTRRLCYZ,Python Programming for Beginners: The Complete Guide to Mastering Python in 7 Days with Hands-On Exercises – Top Secret Coding Tips to Get an Unfair Advantage and Land Your Dream Job!,4.4,660,$23.97,$22.77
 https://www.amazon.com/dp/1423241886,Python Programming Language: a QuickStudy Laminated Reference Guide,4.6,"2,301",,$7.95
 https://www.amazon.com/dp/109810403X,"Python for Data Analysis: Data Wrangling with pandas, NumPy, and Jupyter",4.5,300,$79.99,$41.95
+https://www.amazon.com/dp/B0CSY7BL6Q,Python Programming for Beginners: The Complete Python Coding Crash Course - Boost Your Growth with an Innovative Ultra-Fast Learning Framework and Exclusive Hands-On Interactive Exercises & Projects,4.7,411,$16.80,$15.96
 https://www.amazon.com/dp/B071Z2Q6TQ,Python (2nd Edition): Learn Python in One Day and Learn It Well. Python for Beginners with Hands-on Project. (Learn Coding Fast with Hands-On Project Book 1),4.5,"2,050",,$0.00
 https://www.amazon.com/dp/1449357016,Python Pocket Reference: Python in Your Pocket,4.5,962,$24.99,$13.79
 https://www.amazon.com/dp/163610035X,Python QuickStart Guide: The Simplified Beginner's Guide to Python Programming Using Hands-On Projects and Real-World Applications (Coding & Programming - QuickStart Guides),4.5,173,$34.99,$24.99
@@ -47,5 +47,4 @@ https://www.amazon.com/dp/B09QHBPRBX,The Python Book,3.8,6,,$46.00
 https://www.amazon.com/dp/B0D223XRR9,"Python Programming for Beginners: The Fast-Track Guide to Master Python in Just 1 Week. Unlock Your Coding Potential to Start Your High-Paying Tech Career Today, No Experience Needed!",4.7,105,,$19.97
 https://www.amazon.com/dp/1119787602,"Python All-in-One For Dummies, 2nd Edition (For Dummies (Computer/Tech))",4.6,404,,
 https://www.amazon.com/dp/1840788127,Python in easy steps,4.6,492,$15.99,$10.69
-https://www.amazon.com/dp/1788996666,"Learn Python Programming - Second Edition: The no-nonsense, beginner's guide to programming, data science, and web development with Python 3.7",4.5,163,$45.99,$43.21
-https://www.amazon.com/dp/B0CSY7BL6Q,Python Programming for Beginners: The Complete Python Coding Crash Course - Boost Your Growth with an Innovative Ultra-Fast Learning Framework and Exclusive Hands-On Interactive Exercises & Projects,4.7,411,$16.80,$15.96
+https://www.amazon.com/dp/1617296864,"Deep Learning with Python, Second Edition",4.7,376,$59.99,$40.40
