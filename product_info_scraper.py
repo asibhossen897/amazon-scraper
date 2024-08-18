@@ -1,5 +1,5 @@
 from seleniumbase import BaseCase
-from utils import write2csv
+from utils import write2csv, save_img
 from bs4 import BeautifulSoup
 
 BaseCase.main(__name__, __file__)
@@ -50,14 +50,15 @@ class ProductLinkScraper(BaseCase):
 
         rating_text, total_review = self.extract_rating_and_reviews(product_container)
         original_price, discounted_price = self.extract_prices(product_container)
-
+        product_img_url = self.get_img_link(product_container)
         return {
             "link": full_url,
             "title": title,
             "rating_text": rating_text,
             "total_review": total_review,
             "original_price": original_price,
-            "discounted_price": discounted_price
+            "discounted_price": discounted_price,
+            "product_img_url": product_img_url
         }
 
     def extract_rating_and_reviews(self, container):
@@ -92,6 +93,17 @@ class ProductLinkScraper(BaseCase):
             price = span_element.find("span", class_="a-offscreen")
             if price:
                 return price.get_text(strip=True)
+        return None
+
+    def get_img_link(self, container):
+        img_element = container.find("img", {"data-image-latency": "s-product-image"})
+        if img_element:
+            img_url = img_element.get("src")
+
+            # Split the URL at the last dot before the file extension
+            base_url = img_url.split('._')[0]  # Split on '._' to remove the transformation part
+            final_url = base_url + ".jpg"  # Reconstruct the URL without the transformation part
+            return final_url
         return None
 
     def has_next_page(self, soup, current_page, end_page):
