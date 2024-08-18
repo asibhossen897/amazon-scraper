@@ -6,82 +6,99 @@ BaseCase.main(__name__, __file__)
 
 
 class ProductLinkScraper(BaseCase):
-    def test_scrape_product_links(self):
-        search_query = "Python Book"
-        search_query = search_query.replace(" ", "+").lower()
 
+    def test_scrape_product_info(self):
+        search_query = "Headphones"
         start_page = 1  # Starting page
         end_page = 3  # Last page to scrape
 
-        url = f"https://www.amazon.com/s?k={search_query}&page={start_page}"
-        self.open(url)
-
         data = []
-
-        current_page = start_page
-
-        while current_page <= end_page:
+        for page_number in range(start_page, end_page + 1):
+            url = self.build_search_url(search_query, page_number)
+            self.open(url)
             self.wait_for_element("h2")  # Wait for the page to load
+
             soup = BeautifulSoup(self.get_page_source(), 'html.parser')
+            data.extend(self.extract_product_data(soup))
 
-            # Collect product links
-            for link in soup.find_all("a",
-                                      class_="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal"):
-                href = link.get("href")
-                if "dp" in href and "sspa" not in href:  # Ensure it's a product link
-                    dp = href.split("/")[-2]
-                    full_url = f"https://www.amazon.com/dp/{dp}"
+            if not self.has_next_page(soup, current_page=page_number, end_page=end_page):
+                break
 
-                    # Collect Product Title
-                    title = link.get_text(strip=True)
+        self.save_to_csv(search_query, start_page, end_page, data)
 
-                    # Find the element containing the rating for each product
-                    product_container = link.find_parent("div", class_="sg-col-inner")
+    def build_search_url(self, search_query, page_number):
+        formatted_query = search_query.replace(" ", "+").lower()
+        return f"https://www.amazon.com/s?k={formatted_query}&page={page_number}"
 
-                    rating_text = None
-                    total_review = None
+    def extract_product_data(self, soup):
+        product_data = []
+        product_links = soup.find_all("a",
+                                      class_="a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal")
 
-                    if product_container:
-                        rating_element = product_container.find("span", class_="a-icon-alt")
-                        if rating_element:
-                            rating_text = rating_element.get_text(strip=True)
-                            rating_text = rating_text.split(' ')[0]
+        for link in product_links:
+            href = link.get("href")
+            if "dp" in href and "sspa" not in href:  # Ensure it's a product link
+                product_data.append(self.extract_product_details(link))
 
-                        total_review = product_container.find("div", {"data-csa-c-slot-id": "alf-reviews"})
-                        if total_review:
-                            total_review = total_review.get_text(strip=True)
+        return product_data
 
-                    # Refine the price extraction
-                    original_price = None
-                    discounted_price = None
-                    price_container = product_container.find("div", {"data-cy": "price-recipe"})
+    def extract_product_details(self, link):
+        dp = link.get("href").split("/")[-2]
+        full_url = f"https://www.amazon.com/dp/{dp}"
+        title = link.get_text(strip=True)
+        product_container = link.find_parent("div", class_="sg-col-inner")
 
-                    if price_container:
-                        # Extract original price
-                        original_price_span = price_container.find("span", class_="a-price a-text-price")
-                        if original_price_span:
-                            original_price = original_price_span.find("span", class_="a-offscreen")
-                            if original_price:
-                                original_price = original_price.get_text(strip=True)
+        rating_text, total_review = self.extract_rating_and_reviews(product_container)
+        original_price, discounted_price = self.extract_prices(product_container)
 
-                        # Extract discounted price
-                        discounted_price_span = price_container.find("span", class_="a-price")
-                        if discounted_price_span:
-                            discounted_price = discounted_price_span.find("span", class_="a-offscreen")
-                            if discounted_price:
-                                discounted_price = discounted_price.get_text(strip=True)
+        return {
+            "link": full_url,
+            "title": title,
+            "rating_text": rating_text,
+            "total_review": total_review,
+            "original_price": original_price,
+            "discounted_price": discounted_price
+        }
 
-                    # Combine the link, title, and rating in a dictionary
-                    data.append({"link": full_url, "title": title, "rating_text": rating_text, "total_review": total_review, "original_price": original_price, "discounted_price": discounted_price})
+    def extract_rating_and_reviews(self, container):
+        rating_text = None
+        total_review = None
 
-            # Check if there is a next page and if current page is within the limit
-            next_button = soup.find("a", class_="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator")
-            if next_button and "s-pagination-disabled" not in next_button.get("class", []) and current_page < end_page:
-                current_page += 1
-                next_page_url = f"https://www.amazon.com/s?k={search_query}&page={current_page}"
-                self.open(next_page_url)  # Go to the next page
-            else:
-                break  # No more pages or reached the specified end page
+        if container:
+            rating_element = container.find("span", class_="a-icon-alt")
+            if rating_element:
+                rating_text = rating_element.get_text(strip=True).split(' ')[0]
 
+            total_review_element = container.find("div", {"data-csa-c-slot-id": "alf-reviews"})
+            if total_review_element:
+                total_review = total_review_element.get_text(strip=True)
+
+        return rating_text, total_review
+
+    def extract_prices(self, container):
+        original_price = None
+        discounted_price = None
+        price_container = container.find("div", {"data-cy": "price-recipe"})
+
+        if price_container:
+            original_price = self.get_price_from_span(price_container, "span", "a-price a-text-price")
+            discounted_price = self.get_price_from_span(price_container, "span", "a-price")
+
+        return original_price, discounted_price
+
+    def get_price_from_span(self, container, tag_name, class_name):
+        span_element = container.find(tag_name, class_=class_name)
+        if span_element:
+            price = span_element.find("span", class_="a-offscreen")
+            if price:
+                return price.get_text(strip=True)
+        return None
+
+    def has_next_page(self, soup, current_page, end_page):
+        next_button = soup.find("a",
+                                class_="s-pagination-item s-pagination-next s-pagination-button s-pagination-separator")
+        return next_button and "s-pagination-disabled" not in next_button.get("class", []) and current_page < end_page
+
+    def save_to_csv(self, search_query, start_page, end_page, data):
         filename = f"src/{search_query.replace('+', '_')}_links_page_{start_page}_to_{end_page}.csv"
         write2csv(filename, data)
