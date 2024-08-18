@@ -1,6 +1,16 @@
+import re
 import os
 import csv
 import requests
+
+
+def format_title(title):
+    # Remove any characters that are not alphanumeric or spaces
+    title = re.sub(r'[^a-zA-Z0-9 ]', '', title)
+
+    # Replace spaces with underscores
+    title = title.replace(' ', '_')
+    return title
 
 
 def save_img(path, title, link):

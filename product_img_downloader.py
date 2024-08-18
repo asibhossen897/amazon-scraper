@@ -20,6 +20,7 @@ class ScrapeAmazon(BaseCase):
             # Extract the product title
             title = soup.find(id="title")
             title = title.get_text().strip()
+            title = format_title(title)
 
             # Extract the product image link
             product_img = soup.find(id="landingImage")
@@ -30,7 +31,7 @@ class ScrapeAmazon(BaseCase):
                 final_url = base_url + ".jpg"  # Reconstruct the URL without the transformation part
 
                 # Saving the image to a certain directory
-                path = "images"
+                path = "img"
                 mkdir(path)
                 save_img(path, title, final_url)
             else:
