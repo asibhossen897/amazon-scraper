@@ -8,7 +8,7 @@ BaseCase.main(__name__, __file__)
 class ProductLinkScraper(BaseCase):
 
     def test_scrape_product_info(self):
-        search_query = "Headphones"
+        search_query = "Math books"
         start_page = 1  # Starting page
         end_page = 3  # Last page to scrape
 
@@ -98,7 +98,7 @@ class ProductLinkScraper(BaseCase):
     def get_img_link(self, container):
         img_element = container.find("img", {"data-image-latency": "s-product-image"})
         if img_element:
-            img_url = img_element.get("src")
+            img_url = img_element.get("data")
 
             # Split the URL at the last dot before the file extension
             base_url = img_url.split('._')[0]  # Split on '._' to remove the transformation part
@@ -112,5 +112,5 @@ class ProductLinkScraper(BaseCase):
         return next_button and "s-pagination-disabled" not in next_button.get("class", []) and current_page < end_page
 
     def save_to_csv(self, search_query, start_page, end_page, data):
-        filename = f"src/{search_query.replace('+', '_')}_links_page_{start_page}_to_{end_page}.csv"
+        filename = f"data/{search_query.replace('+', '_')}_links_page_{start_page}_to_{end_page}.csv"
         write2csv(filename, data)

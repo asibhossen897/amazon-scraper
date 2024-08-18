@@ -35,8 +35,8 @@ def download_images_concurrently(links, titles, path, max_workers=10):
 
 
 if __name__ == "__main__":
-    filename = r'src/Headphones_links_page_1_to_3.csv'
+    filename = r'data/Math books_links_page_1_to_3.csv'
     links, titles = get_data_from_csv(filename)
-    path = "imgs"
+    path = "downloaded_files/math_books"
 
     download_images_concurrently(links, titles, path, max_workers=10)

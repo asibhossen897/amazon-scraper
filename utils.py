@@ -16,8 +16,12 @@ def format_title(title):
 def save_img(path, title, link):
     r = requests.get(link)
     if r.status_code == 200:
-        with open(f"{path}/{title}.jpg", 'wb') as f:
-            f.write(r.content)
+        filename = f"{path}/{title}.jpg"
+        if not os.path.exists(filename):
+            with open(filename, 'wb') as f:
+                f.write(r.content)
+        else:
+            print(f"{filename} already exists!")
     else:
         print(f"Failed to download {title} from {link}")
 

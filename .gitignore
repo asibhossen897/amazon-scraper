@@ -1,5 +1,10 @@
+# folders
 .idea/
 .venv/
 __pycache__/
 .pytest_cache
 latest_logs/
+downloaded_files/
+
+# files
+links.txt

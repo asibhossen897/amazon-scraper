@@ -6,7 +6,7 @@ BaseCase.main(__name__, __file__)
 
 class ScrapeAmazon(BaseCase):
     def test_scrape(self):
-        filename = r'src/python_book_links.csv'
+        filename = r'data/python_book_links.csv'
 
         # Read the CSV file and get links from the 'link' column
         links_df = pd.read_csv(filename)
@@ -25,7 +25,7 @@ class ScrapeAmazon(BaseCase):
             # Extract the product image link
             product_img = soup.find(id="landingImage")
             if product_img:
-                product_img_url = product_img.get("src")
+                product_img_url = product_img.get("data")
                 # Split the URL at the last dot before the file extension
                 base_url = product_img_url.split('._')[0]  # Split on '._' to remove the transformation part
                 final_url = base_url + ".jpg"  # Reconstruct the URL without the transformation part
