@@ -1,0 +1,8 @@
+pip~=24.2
+tqdm~=4.66.5
+pandas~=2.2.2
+seaborn~=0.13.2
+requests~=2.31.0
+matplotlib~=3.9.2
+seleniumbase~=4.29.9
+beautifulsoup4~=4.12.3

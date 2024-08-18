@@ -14,9 +14,12 @@ def format_title(title):
 
 
 def save_img(path, title, link):
-    with open(f"{path}/{title}.jpg", 'wb') as f:
-        f.write(requests.get(link).content)
-        print("Image saved successfully.")
+    r = requests.get(link)
+    if r.status_code == 200:
+        with open(f"{path}/{title}.jpg", 'wb') as f:
+            f.write(r.content)
+    else:
+        print(f"Failed to download {title} from {link}")
 
 
 def mkdir(path):
